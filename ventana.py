@@ -11,7 +11,7 @@ class Ventana(Frame):
     
     Seller = Client()
     cont = 0  
-    So = "sa"
+    So = "s_vc"
      
     def __init__(self, master=None):
         
@@ -33,7 +33,7 @@ class Ventana(Frame):
         winAdd.title("Añadir")
         winAdd.resizable(False,False)
         va=95
-        vb=60
+        vb=50
         frame2 = Frame(winAdd,bg="#2F3E45" )
         frame2.place(x=0,y=0,width=350, height=400)                        
         addName=Label(winAdd, text="Nombre",bg="#2F3E45",fg="white")
@@ -53,18 +53,21 @@ class Ventana(Frame):
         self.EnVal=Entry(frame2)
         self.EnVal.place(x=va,y=191+vb,width=160, height=20)  
         self.winAdd=winAdd
+        addDes=Label(winAdd, text="Descripcion",bg="#2F3E45",fg="white")
+        addDes.place(x=va,y=220+vb)     
+        self.EnDes=Entry(frame2)
+        self.EnDes.place(x=va,y=241+vb,width=160, height=20)  
+        self.EnName.focus()
+        
+        self.winAdd=winAdd
         addBot=Button(winAdd, text="Agregar",command=self.addWinBot,bg="#05867B", fg="white",relief=FLAT)
-        addBot.place(x=va+50,y=260+vb,width=60, height=30) 
-
-
+        addBot.place(x=va+50,y=280+vb,width=60, height=30) 
     def addWinBot(self):
         print(self.EnName.get() + "-"+self.EnID.get()+ "-"+self.EnCel.get()+ "-"+self.EnVal.get())
+        self.Seller.insertat(self.EnName.get(),self.EnID.get(),self.EnCel.get(),self.EnVal.get(),self.EnDes.get())
+        #self.Seller.newTable(self.txtID.get(),self.txtValue.get(),self.txtDes.get())
         self.winAdd.destroy()
         
-
-
-        
-
     def habilib(self,bn):
         if bn == 1:
             self.btnAdd.configure(bg="#2F3E45",fg="white")
