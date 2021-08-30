@@ -65,9 +65,44 @@ class Ventana(Frame):
     def addWinBot(self):
         print(self.EnName.get() + "-"+self.EnID.get()+ "-"+self.EnCel.get()+ "-"+self.EnVal.get())
         self.Seller.insertat(self.EnName.get(),self.EnID.get(),self.EnCel.get(),self.EnVal.get(),self.EnDes.get())
+        nam=self.EnName().replace(" ","_")
+        self.Seller.newTable(nam.lower())
         #self.Seller.newTable(self.txtID.get(),self.txtValue.get(),self.txtDes.get())
         self.winAdd.destroy()
         
+    def delWin(self):
+        winDel = Toplevel(self)
+        winDel.geometry("350x400")
+        winDel.title("Eliminar")
+        winDel.resizable(False,False)
+        va=95
+        vb=80
+        frame2 = Frame(winDel,bg="#2F3E45" )
+        frame2.place(x=0,y=0,width=350, height=400)                    
+        delLab=Label(winDel, text="Se eliminara todo registro de forma permanente \n asi como el historial de facturas. ",bg="#2F3E45",fg="white")    
+        delLab.place(x=va-35,y=vb-30)  
+        delName=Label(winDel, text="Nombre",bg="#2F3E45",fg="white")
+        delName.place(x=va,y=20+vb)     
+        self.EnName=Entry(frame2)
+        self.EnName.place(x=va,y=41+vb,width=160, height=20)    
+        delID=Label(winDel, text="ID",bg="#2F3E45",fg="white")
+        delID.place(x=va,y=70+vb)     
+        self.delID=Entry(frame2)
+        self.delID.place(x=va,y=91+vb,width=160, height=20)    
+        self.winDel=winDel
+        addBot=Button(winDel, text="Aceptar",command=self.delWinBot,bg="#05867B", fg="white",relief=FLAT)
+        addBot.place(x=va+50,y=280,width=60, height=30) 
+    def delWinBot(self):
+        print(self.EnName.get() + "-"+self.delID.get())
+        self.Seller.elimina(self.delID.get())
+        nam=self.EnName().replace(" ","_")
+        self.Seller.DeTable(nam.lower())
+        self.Seller.elimina(self.delID.get())
+        #self.Seller.newTable(self.txtID.get(),self.txtValue.get(),self.txtDes.get())
+        self.winAdd.destroy()
+        
+
+
     def habilib(self,bn):
         if bn == 1:
             self.btnAdd.configure(bg="#2F3E45",fg="white")
@@ -269,6 +304,7 @@ class Ventana(Frame):
         self.cont = 4
         pass
     def bDelet(self):
+        self.delWin()
         self.lbl4.config(text="")
         self.habili(2) 
         self.habilib(2)   
