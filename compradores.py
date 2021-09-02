@@ -67,16 +67,16 @@ class Client:
             cur.close()    
         return datos
 
-    def buscar (self, Id,s,k):
+    def buscar (self, Id,k):
         if k == 1:
             cur = self.cnn.cursor()
-            sql= "SELECT * FROM {} WHERE N = {}".format(s,Id)
+            sql= "SELECT * FROM resibo WHERE RC = '{}'".format(Id)
             cur.execute(sql)
             datos = cur.fetchone()
             cur.close()    
         else:
             cur = self.cnn.cursor()
-            sql= "SELECT * FROM {} WHERE ID = {}".format(s,Id)
+            sql= "SELECT * FROM s_vc WHERE Nombre = '{}'".format(Id)
             cur.execute(sql)
             datos = cur.fetchone()
             cur.close()    
@@ -123,14 +123,11 @@ class Client:
         n=cur.rowcount
         self.cnn.commit()    
         cur.close()
-        nam=Nombre.replace(" ","_")
-        self.newTable(nam.lower())
-
         return n    
 
-    def elimina (self,Id,s):
+    def elimina (self,Id):
         cur = self.cnn.cursor()
-        sql='''DELETE FROM {} WHERE ID = {}'''.format(s,Id)
+        sql='''DELETE FROM s_vc WHERE ID = {}'''.format(Id)
         cur.execute(sql)
         n=cur.rowcount
         self.cnn.commit()    

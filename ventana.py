@@ -20,12 +20,12 @@ class Ventana(Frame):
         self.pack()
         self.create_widgets()
         self.habili(5)
-        #self.datos(self.So)
+        
 
     def datos(self,k):
         datos = self.Seller.consulta(k)
-        for row in datos:
-            self.grid.insert("",END, text= row[0], values=(row[1],row[2],row[3],row[4]))
+        print(datos)
+        self.cretGrip(datos,2)
 
     def addWin(self):
         winAdd = Toplevel(self)
@@ -63,11 +63,14 @@ class Ventana(Frame):
         addBot=Button(winAdd, text="Agregar",command=self.addWinBot,bg="#05867B", fg="white",relief=FLAT)
         addBot.place(x=va+50,y=280+vb,width=60, height=30) 
     def addWinBot(self):
+        nam=self.EnName.get()
         print(self.EnName.get() + "-"+self.EnID.get()+ "-"+self.EnCel.get()+ "-"+self.EnVal.get())
-        self.Seller.insertat(self.EnName.get(),self.EnID.get(),self.EnCel.get(),self.EnVal.get(),self.EnDes.get())
-        nam=self.EnName().replace(" ","_")
-        self.Seller.newTable(nam.lower())
-        #self.Seller.newTable(self.txtID.get(),self.txtValue.get(),self.txtDes.get())
+        if len(nam.split(" ")) > 1:
+            nam=nam.replace(" ","_")
+        nam=nam.lower()
+        self.Seller.insertat(nam,self.EnID.get(),self.EnCel.get(),self.EnVal.get(),self.EnDes.get())
+        self.Seller.newTable(nam)
+        self.datos("s_vc")
         self.winAdd.destroy()
         
     def delWin(self):
@@ -83,8 +86,8 @@ class Ventana(Frame):
         delLab.place(x=va-35,y=vb-30)  
         delName=Label(winDel, text="Nombre",bg="#2F3E45",fg="white")
         delName.place(x=va,y=20+vb)     
-        self.EnName=Entry(frame2)
-        self.EnName.place(x=va,y=41+vb,width=160, height=20)    
+        self.deName=Entry(frame2)
+        self.deName.place(x=va,y=41+vb,width=160, height=20)    
         delID=Label(winDel, text="ID",bg="#2F3E45",fg="white")
         delID.place(x=va,y=70+vb)     
         self.delID=Entry(frame2)
@@ -93,15 +96,42 @@ class Ventana(Frame):
         addBot=Button(winDel, text="Aceptar",command=self.delWinBot,bg="#05867B", fg="white",relief=FLAT)
         addBot.place(x=va+50,y=280,width=60, height=30) 
     def delWinBot(self):
-        print(self.EnName.get() + "-"+self.delID.get())
-        self.Seller.elimina(self.delID.get())
-        nam=self.EnName().replace(" ","_")
-        self.Seller.DeTable(nam.lower())
-        self.Seller.elimina(self.delID.get())
-        #self.Seller.newTable(self.txtID.get(),self.txtValue.get(),self.txtDes.get())
-        self.winAdd.destroy()
-        
+        nam=self.EnName.get()
+        if len(nam.split(" ")) > 1:
+            nam=nam.replace(" ","_")
+        nam=nam.lower()
 
+        self.Seller.elimina(self.delID.get())
+        self.Seller.DeTable(nam)
+        self.winAdd.destroy()
+    
+    def sehWin(self):
+        winSeh = Toplevel(self)
+        winSeh.geometry("350x400")
+        winSeh.title("Buscar")
+        winSeh.resizable(False,False)
+        va=95
+        vb=80
+        frame2 = Frame(winSeh,bg="#2F3E45" )
+        frame2.place(x=0,y=0,width=350, height=400)                    
+        seLab=Label(winSeh, text="Escribir ID de factura o Nombre de cliente. ",bg="#2F3E45",fg="white")    
+        seLab.place(x=va-35,y=vb-30)  
+        self.seName=Entry(frame2)
+        self.seName.place(x=va,y=41+vb,width=160, height=20)    
+        self.winSeh=winSeh
+        addBot=Button(winSeh, text="Factura",command=self.seWinBot,bg="#05867B", fg="white",relief=FLAT)
+        addBot.place(x=va,y=280,width=60, height=30) 
+        seBot=Button(winSeh, text="Cliente",command=self.seWinBot1,bg="#05867B", fg="white",relief=FLAT)
+        seBot.place(x=va+90,y=280,width=60, height=30) 
+    def seWinBot(self):
+        data = self.Seller.buscar(self.seName.get(),1)
+        self.cretGrip(data,1)
+
+        self.winSeh.destroy()
+    def seWinBot1(self):
+        data = self.Seller.buscar(self.seName.get(),3)
+        self.cretGrip(data,1)
+        self.winSeh.destroy()
 
     def habilib(self,bn):
         if bn == 1:
@@ -296,6 +326,7 @@ class Ventana(Frame):
         self.cont = 1
         pass
     def bChan(self):        
+        self.chaWin()
         self.lbl4.config(text="")
         self.habili(3)
         self.habilib(3)    
@@ -312,6 +343,7 @@ class Ventana(Frame):
         self.txtID.focus()  
         self.cont = 2
     def bShow(self):
+        self.sehWin()
         self.lbl4.config(text="")
         self.habili(2)
         self.habilib(4)    
@@ -357,7 +389,51 @@ class Ventana(Frame):
                self.Val()
            except:
                self.lbl4.config(text="ID Erronea.")
- 
+    
+    def cretGrip(self,dat,k):
+       
+        if k ==1: #buscart
+            print("holos5")
+            self.grid = ttk.Treeview(self, columns=("col1","col2","col3","col4","col5"))        
+            self.grid.column("#0",width=20)
+            self.grid.column("col1",width=60, anchor=CENTER)
+            self.grid.column("col2",width=100, anchor=CENTER)
+            self.grid.column("col3",width=90, anchor=CENTER)
+            self.grid.column("col4",width=100, anchor=CENTER)
+            self.grid.column("col5",width=100, anchor=CENTER)
+
+            self.grid.heading("#0", text="#", anchor=CENTER)
+            self.grid.heading("col1", text="Nombre", anchor=CENTER)
+            self.grid.heading("col2", text="ID", anchor=CENTER)
+            self.grid.heading("col3", text="Celular", anchor=CENTER)
+            self.grid.heading("col4", text="Descripcíon", anchor=CENTER)
+            self.grid.heading("col5", text="Valor", anchor=CENTER)
+            self.grid.place(x=310,y=0,width=970, height=650)
+            self.grid.insert("",END, text= str(dat[0]), values=(str(dat[1]),str(dat[2]),str(dat[3]),str(dat[4]),str(dat[5])))
+        elif k ==2:
+            print("holosasd5")
+            self.grid = ttk.Treeview(self, columns=("col1","col2","col3","col4","col5"))        
+            self.grid.column("#0",width=20)
+            self.grid.column("col1",width=60, anchor=CENTER)
+            self.grid.column("col2",width=100, anchor=CENTER)
+            self.grid.column("col3",width=90, anchor=CENTER)
+            self.grid.column("col4",width=100, anchor=CENTER)
+            self.grid.column("col5",width=100, anchor=CENTER)
+
+            self.grid.heading("#0", text="#", anchor=CENTER)
+            self.grid.heading("col1", text="Nombre", anchor=CENTER)
+            self.grid.heading("col2", text="ID", anchor=CENTER)
+            self.grid.heading("col3", text="Celular", anchor=CENTER)
+            self.grid.heading("col4", text="Descripcíon", anchor=CENTER)
+            self.grid.heading("col5", text="Valor", anchor=CENTER)
+            self.grid.place(x=310,y=0,width=970, height=650)
+            for row in dat:
+                self.grid.insert("",END, text= row[0], values=(row[1],row[2],row[3],row[4],row[5]))
+
+
+        else:
+            print("CHAOS16")
+
     def create_widgets(self):
         frame1 = Frame(self, bg="#20292E")
         frame1.place(x=0,y=0,width=100, height=720)        
@@ -399,22 +475,9 @@ class Ventana(Frame):
         lbl5.place(x=120,y=670)        
         self.txtDes=Entry(frame2)
         self.txtDes.place(x=207,y=670,width=780, height=20)   
+        #self.cretGrip()
 
 
-        self.grid = ttk.Treeview(self, columns=("col1","col2","col3","col4"))        
-        self.grid.column("#0",width=20)
-        self.grid.column("col1",width=60, anchor=CENTER)
-        self.grid.column("col2",width=100, anchor=CENTER)
-        self.grid.column("col3",width=90, anchor=CENTER)
-        self.grid.column("col4",width=100, anchor=CENTER)
-
-        self.grid.heading("#0", text="#", anchor=CENTER)
-        self.grid.heading("col1", text="ID", anchor=CENTER)
-        self.grid.heading("col2", text="Nombre", anchor=CENTER)
-        self.grid.heading("col3", text="Valor", anchor=CENTER)
-        self.grid.heading("col4", text="Descripcíon", anchor=CENTER)
-
-        self.grid.place(x=310,y=0,width=970, height=650)
         
         
 V1 = Tk()

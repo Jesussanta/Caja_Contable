@@ -1,16 +1,5 @@
-
-from tkinter import *
-from ventana import *
-
-
-def main():
-    root = Tk()
-    root.wm_title("Caja")
-    app = Ventana(root) 
-    app.mainloop()
-
-
-
-
-if __name__ == "__main__":
-    main()
+txt =[("dar","mio"),("Buenas","noces","quedice")]
+print(type(txt))
+print(txt)
+print(txt[1][1])
+print(len(txt[1]))
