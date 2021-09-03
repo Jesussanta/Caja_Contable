@@ -4,13 +4,9 @@ from tkinter import ttk
 from fpdf import FPDF
 from compradores import * 
 
-
-
-
 class Ventana(Frame):
     
     Seller = Client()
-    cont = 0  
     So = "s_vc"
      
     def __init__(self, master=None):
@@ -20,7 +16,6 @@ class Ventana(Frame):
         self.pack()
         self.create_widgets()
         #self.habili(5)
-        
 
     def datos(self,k):
         datos = self.Seller.consulta(k)
@@ -126,28 +121,43 @@ class Ventana(Frame):
     def seWinBot(self):
         data = self.Seller.buscar(self.seName.get(),1)
         self.cretGrip(data,1)
-
         self.winSeh.destroy()
     def seWinBot1(self):
         data = self.Seller.buscar(self.seName.get(),3)
         self.cretGrip(data,1)
         self.winSeh.destroy()
+
     def chaWin(self):
-        wincha = Toplevel(self)
-        wincha.geometry("350x400")
-        wincha.title("Buscar")
-        wincha.resizable(False,False)
+        winCha = Toplevel(self)
+        winCha.geometry("350x400")
+        winCha.title("Buscar")
+        winCha.resizable(False,False)
         va=95
         vb=80
-        frame2 = Frame(wincha,bg="#2F3E45" )
+        frame2 = Frame(winCha,bg="#2F3E45" )
         frame2.place(x=0,y=0,width=350, height=400)                    
-        seLab=Label(wincha, text="Escribir nombre de cliente. ",bg="#2F3E45",fg="white")    
-        seLab.place(x=va-35,y=vb-30)  
+        seLab=Label(winCha, text="Escribir el nombre de cliente. \n  y seleccione la accion a realizar. ",bg="#2F3E45",fg="white")    
+        seLab.place(x=va-10,y=vb-30)  
         self.chaName=Entry(frame2)
-        self.chaName.place(x=va,y=41+vb,width=160, height=20)    
-        self.wincha=wincha        
-        chaBot=Button(wincha, text="Cliente",command=self.chaWinBot,bg="#05867B", fg="white",relief=FLAT)
+        self.chaName.place(x=va-20,y=41+vb,width=200, height=20)    
+        self.winCha=winCha        
+        chaBot=Button(winCha, text="Nuevo",command=self.chaWinBot,bg="#05867B", fg="white",relief=FLAT)
         chaBot.place(x=va+90,y=280,width=60, height=30) 
+        chaBot1=Button(winCha, text="Abonos",command=self.chaWinBot1,bg="#05867B", fg="white",relief=FLAT)
+        chaBot1.place(x=va,y=280,width=60, height=30) 
+
+    def chaWinBot1(self):
+        nam=self.chaName.get()
+        if len(nam.split(" ")) > 1:
+            nam=nam.replace(" ","_")
+        nam=nam.lower()
+
+        datos = self.Seller.STab(nam)
+        self.cretGrip(datos,3)
+
+
+        self.winCha.destroy()
+        pass
 
     def chaWinBot(self):
         nam=self.chaName.get()
@@ -156,25 +166,26 @@ class Ventana(Frame):
         nam=nam.lower()
 
         datos = self.Seller.STab(nam)
-        self.cretGrip(datos, 3)
-        self.wincha.destroy()
+        self.cretGrip(datos,3)
+        self.winCha.destroy()
+
     def habilib(self,bn):
-        if bn == 1:
+        if bn == 1: #add
             self.btnAdd.configure(bg="#2F3E45",fg="white")
             self.btnDelet.configure(bg="#20292E",fg="white")
             self.btnChan.configure(bg="#20292E",fg="white")
             self.btnShow.configure(bg="#20292E",fg="white")
-        elif bn == 2:
+        elif bn == 2: #del
             self.btnDelet.configure(bg="#2F3E45",fg="white")
             self.btnAdd.configure(bg="#20292E",fg="white")
             self.btnChan.configure(bg="#20292E",fg="white")
             self.btnShow.configure(bg="#20292E",fg="white")
-        elif bn == 3:
+        elif bn == 3: #chan
             self.btnChan.configure(bg="#2F3E45",fg="white")
             self.btnDelet.configure(bg="#20292E",fg="white")
             self.btnAdd.configure(bg="#20292E",fg="white")
             self.btnShow.configure(bg="#20292E",fg="white")
-        elif bn ==4:
+        elif bn ==4: #show
             self.btnAdd.configure(bg="#20292E",fg="white")
             self.btnDelet.configure(bg="#20292E",fg="white")
             self.btnChan.configure(bg="#20292E",fg="white")
@@ -184,27 +195,7 @@ class Ventana(Frame):
             self.btnDelet.configure(bg="#20292E",fg="white")
             self.btnChan.configure(bg="#20292E",fg="white")
             self.btnShow.configure(bg="#20292E",fg="white")
-    def habili(self,bn):
-        if bn == 1:
-            self.txtName.configure(state="normal")
-            self.txtID.configure(state="normal")
-            self.txtValue.configure(state="normal")
-            self.txtDes.configure(state="normal")
-        elif bn == 2:
-            self.txtName.configure(state="disabled")
-            self.txtID.configure(state="normal")
-            self.txtValue.configure(state="disabled")
-            self.txtDes.configure(state="disabled")
-        elif bn ==3:
-            self.txtName.configure(state="disabled")
-            self.txtID.configure(state="normal")
-            self.txtValue.configure(state="normal")
-            self.txtDes.configure(state="normal")
-                    
-        else:
-            self.txtName.configure(state="disabled")
-            self.txtID.configure(state="disabled")
-            self.txtValue.configure(state="disabled")
+            #self.txtName.configure(state="normal")
 
     def clGrip(self):
         for i in self.grid.get_children():
@@ -214,13 +205,6 @@ class Ventana(Frame):
         self.txtID.delete(0,END)
         self.txtValue.delete(0,END)
         self.txtDes.delete(0,END)
-    def gripb (self):
-        self.grid.heading("#0", text="#", anchor=CENTER)
-        self.grid.heading("col1", text="ID", anchor=CENTER)
-        self.grid.heading("col2", text="Nombre", anchor=CENTER)
-        self.grid.heading("col3", text="Valor", anchor=CENTER)
-        self.grid.heading("col4", text="Descripcíon", anchor=CENTER)
-        
     def Busc(self):
 
         val=list(self.txtID.get())
@@ -247,8 +231,6 @@ class Ventana(Frame):
                     self.grid.heading("col2", text="Nombre", anchor=CENTER)
                     self.grid.heading("col3", text="Fecha ", anchor=CENTER)
                     self.grid.heading("col4", text="Valor / Descripcion", anchor=CENTER)
-                    
-
                     self.grid.insert("",END, text= str(Fa[0]), values=(str(Fa[1]),str(Fa[2]),str(Fa[3]),str(Fa[4])))
                     self.grid.insert("",END, text= str(""), values=(str(""),str(""),str(""),Fa[5]))
                     print("6")
@@ -343,32 +325,18 @@ class Ventana(Frame):
   
     def bAdd(self):
         self.addWin()
-        pass
+        self.habilib(1)  
     def bChan(self):        
         self.chaWin()
-        self.lbl4.config(text="")
-        self.habili(3)
         self.habilib(3)    
-        self.cBox()
-        self.txtID.focus()
-        self.cont = 4
-        pass
     def bDelet(self):
         self.delWin()
-        self.lbl4.config(text="")
-        self.habili(2) 
         self.habilib(2)   
         self.cBox()
-        self.txtID.focus()  
-        self.cont = 2
     def bShow(self):
         self.sehWin()
-        self.lbl4.config(text="")
-        self.habili(2)
         self.habilib(4)    
-        self.txtID.focus()    
-        self.cBox()
-        self.cont = 3
+#        self.cBox()
     def bSave(self): 
         self.clGrip()
         self.gripb()
@@ -445,7 +413,7 @@ class Ventana(Frame):
             self.grid.heading("col3", text="Celular", anchor=CENTER)
             self.grid.heading("col4", text="Descripcíon", anchor=CENTER)
             self.grid.heading("col5", text="Valor", anchor=CENTER)
-            self.grid.place(x=310,y=0,width=970, height=650)
+            self.grid.place(x=0,y=0,width=1170, height=850)
             for row in dat:
                 self.grid.insert("",END, text= row[0], values=(row[1],row[2],row[3],row[4],row[5]))
 
@@ -485,23 +453,21 @@ class Ventana(Frame):
             self.grid.heading("col12", text="Abono2", anchor=CENTER)
             self.grid.heading("col13", text="VR/Fra", anchor=CENTER)
             self.grid.heading("col14", text="VR_Acum", anchor=CENTER)
-            self.grid.place(x=310,y=0,width=970, height=650)
+            self.grid.place(x=110,y=0,width=970, height=650)
             for row in dat:
                 self.grid.insert("",END, text= row[0], values=(row[1],row[2],row[3],row[4],row[5]))
-
-
     def create_widgets(self):
         frame1 = Frame(self, bg="#20292E")
         frame1.place(x=0,y=0,width=100, height=720)        
-
+        v=80
         self.btnAdd=Button(frame1,text="Añadir", command=self.bAdd, bg="#20292E", fg="white",relief=FLAT, )
-        self.btnAdd.place(x=0,y=140,width=110, height=30 )        
+        self.btnAdd.place(x=0,y=140+v,width=110, height=30 )        
         self.btnDelet=Button(frame1,text="Eliminar", command=self.bDelet, bg="#20292E", fg="white",relief=FLAT)
-        self.btnDelet.place(x=0,y=210,width=110, height=30)        
+        self.btnDelet.place(x=0,y=210+v,width=110, height=30)        
         self.btnShow=Button(frame1,text="Explorar", command=self.bShow, bg="#20292E", fg="white",relief=FLAT)
-        self.btnShow.place(x=0,y=280,width=110, height=30)
+        self.btnShow.place(x=0,y=280+v,width=110, height=30)
         self.btnChan=Button(frame1,text="Modificar", command=self.bChan, bg="#20292E", fg="white",relief=FLAT)
-        self.btnChan.place(x=0,y=350,width=110, height=30)    
+        self.btnChan.place(x=0,y=650,width=110, height=30)    
 
         frame2 = Frame(self,bg="#2F3E45" )
         frame2.place(x=100,y=0,width=1200, height=720)                        
@@ -511,10 +477,6 @@ class Ventana(Frame):
         #self.txtID.place(x=30,y=25+100,width=160, height=20)                
         #lbl2 = Label(frame2,text="Nombre: ",bg="#2F3E45",fg="white")
 
-        
-
-        
-        
 V1 = Tk()
 V1.wm_title("Caja")
 app = Ventana(V1) 
