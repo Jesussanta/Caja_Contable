@@ -11,7 +11,7 @@ class Ventana(Frame):
      
     def __init__(self, master=None):
         
-        super().__init__(master,width=1280, height=720)
+        super().__init__(master,width=1580, height=720)
         self.master = master
         self.pack()
         self.create_widgets()
@@ -88,6 +88,7 @@ class Ventana(Frame):
         self.delID=Entry(frame2)
         self.delID.place(x=va,y=91+vb,width=160, height=20)    
         self.winDel=winDel
+        self.deName.focus()
         addBot=Button(winDel, text="Aceptar",command=self.delWinBot,bg="#05867B", fg="white",relief=FLAT)
         addBot.place(x=va+50,y=280,width=60, height=30) 
     def delWinBot(self):
@@ -118,6 +119,8 @@ class Ventana(Frame):
         addBot.place(x=va,y=280,width=60, height=30) 
         seBot=Button(winSeh, text="Cliente",command=self.seWinBot1,bg="#05867B", fg="white",relief=FLAT)
         seBot.place(x=va+90,y=280,width=60, height=30) 
+        self.seName.focus()
+
     def seWinBot(self):
         data = self.Seller.buscar(self.seName.get(),1)
         self.cretGrip(data,1)
@@ -141,33 +144,117 @@ class Ventana(Frame):
         self.chaName=Entry(frame2)
         self.chaName.place(x=va-20,y=41+vb,width=200, height=20)    
         self.winCha=winCha        
+        self.chaName.focus()
         chaBot=Button(winCha, text="Nuevo",command=self.chaWinBot,bg="#05867B", fg="white",relief=FLAT)
         chaBot.place(x=va+90,y=280,width=60, height=30) 
         chaBot1=Button(winCha, text="Abonos",command=self.chaWinBot1,bg="#05867B", fg="white",relief=FLAT)
         chaBot1.place(x=va,y=280,width=60, height=30) 
-
     def chaWinBot1(self):
         nam=self.chaName.get()
         if len(nam.split(" ")) > 1:
             nam=nam.replace(" ","_")
         nam=nam.lower()
-
         datos = self.Seller.STab(nam)
         self.cretGrip(datos,3)
-
-
         self.winCha.destroy()
-        pass
-
     def chaWinBot(self):
         nam=self.chaName.get()
         if len(nam.split(" ")) > 1:
             nam=nam.replace(" ","_")
         nam=nam.lower()
-
         datos = self.Seller.STab(nam)
         self.cretGrip(datos,3)
+        self.gripWin()
         self.winCha.destroy()
+    def gripWin(self):
+        winGrip = Toplevel(self)
+        winGrip.geometry("1580x100")
+        winGrip.title("Buscar")
+        winGrip.resizable(False,False)
+        frame2 = Frame(winGrip,bg="#2F3E45" )
+        frame2.place(x=0,y=0,width=1580, height=200)       
+        v=20
+        chaLab=Label(winGrip, text="Fecha",bg="#2F3E45",fg="white")    
+        chaLab.place(x=10,y=10)  
+        self.griFech=Entry(frame2)
+        self.griFech.place(x=10,y=50,width=100, height=20)    
+
+        chaLab1=Label(winGrip, text="Remision",bg="#2F3E45",fg="white")    
+        chaLab1.place(x=100+v,y=10)  
+        self.griRe=Entry(frame2)
+        self.griRe.place(x=100+v,y=50,width=100, height=20)    
+          
+        chaLab2=Label(winGrip, text="F_E",bg="#2F3E45",fg="white")    
+        chaLab2.place(x=210+v,y=10)  
+        self.griF_E=Entry(frame2)
+        self.griF_E.place(x=210+v,y=50,width=100, height=20)    
+
+        chaLab3=Label(winGrip, text="CL_Fisc",bg="#2F3E45",fg="white")    
+        chaLab3.place(x=320+v,y=10)  
+        self.griCL=Entry(frame2)
+        self.griCL.place(x=320+v,y=50,width=100, height=20)    
+
+        chaLab4=Label(winGrip, text="VR_Fra",bg="#2F3E45",fg="white")    
+        chaLab4.place(x=430+v,y=10)  
+        self.griVr=Entry(frame2)
+        self.griVr.place(x=430+v,y=50,width=100, height=20)   
+        
+        chaLab5=Label(winGrip, text="Fecha_Venc",bg="#2F3E45",fg="white")    
+        chaLab5.place(x=540+v,y=10)  
+        self.griF_V=Entry(frame2)
+        self.griF_V.place(x=540+v,y=50,width=100, height=20)   
+
+        chaLab6=Label(winGrip, text="R_caja1",bg="#2F3E45",fg="white")    
+        chaLab6.place(x=650+v,y=10)  
+        self.griRC_1=Entry(frame2)
+        self.griRC_1.place(x=650+v,y=50,width=100, height=20)   
+        
+        chaLab7=Label(winGrip, text="Fecha_a1",bg="#2F3E45",fg="white")    
+        chaLab7.place(x=760+v,y=10)  
+        self.griFA_1=Entry(frame2)
+        self.griFA_1.place(x=760+v,y=50,width=100, height=20)   
+
+        chaLab8=Label(winGrip, text="Abono1",bg="#2F3E45",fg="white")    
+        chaLab8.place(x=870+v,y=10)  
+        self.griA_1=Entry(frame2)
+        self.griA_1.place(x=870+v,y=50,width=100, height=20)   
+
+        chaLab9=Label(winGrip, text="R_caja2",bg="#2F3E45",fg="white")    
+        chaLab9.place(x=980+v,y=10)  
+        self.griRC_2=Entry(frame2)
+        self.griRC_2.place(x=980+v,y=50,width=100, height=20)   
+        
+        chaLab10=Label(winGrip, text="Fecha_a2",bg="#2F3E45",fg="white")    
+        chaLab10.place(x=1090+v,y=10)  
+        self.griFA_2=Entry(frame2)
+        self.griFA_2.place(x=1090+v,y=50,width=100, height=20)   
+
+        chaLab11=Label(winGrip, text="Abono2",bg="#2F3E45",fg="white")    
+        chaLab11.place(x=1200+v,y=10)  
+        self.griA_2=Entry(frame2)
+        self.griA_2.place(x=1200+v,y=50,width=100, height=20)   
+           
+        chaLab12=Label(winGrip, text="VR/Fra",bg="#2F3E45",fg="white")    
+        chaLab12.place(x=1310+v,y=10)  
+        self.griVR_FR=Entry(frame2)
+        self.griVR_FR.place(x=1310+v,y=50,width=100, height=20)   
+
+        self.winGrip=winGrip     
+
+        GripBot=Button(winGrip, text="Añadir",command=self.griWinBot,bg="#05867B", fg="white",relief=FLAT)
+        GripBot.place(x=1470,y=30,width=60, height=30) 
+    def griWinBot(self):
+        print(self.griVR_FR.get())
+        if self.griVR_FR.get() == "":
+            print("pasa")
+            
+        print(self.griVR_FR.get())
+        self.winGrip.destroy()
+       
+
+    
+
+
 
     def habilib(self,bn):
         if bn == 1: #add
@@ -332,7 +419,7 @@ class Ventana(Frame):
     def bDelet(self):
         self.delWin()
         self.habilib(2)   
-        self.cBox()
+      #  self.cBox()
     def bShow(self):
         self.sehWin()
         self.habilib(4)    
@@ -395,7 +482,7 @@ class Ventana(Frame):
             self.grid.heading("col3", text="Celular", anchor=CENTER)
             self.grid.heading("col4", text="Descripcíon", anchor=CENTER)
             self.grid.heading("col5", text="Valor", anchor=CENTER)
-            self.grid.place(x=310,y=0,width=970, height=650)
+            self.grid.place(x=110,y=0,width=1160, height=715)
             self.grid.insert("",END, text= str(dat[0]), values=(str(dat[1]),str(dat[2]),str(dat[3]),str(dat[4]),str(dat[5])))
         elif k ==2:
             print("holosasd5")
@@ -413,29 +500,28 @@ class Ventana(Frame):
             self.grid.heading("col3", text="Celular", anchor=CENTER)
             self.grid.heading("col4", text="Descripcíon", anchor=CENTER)
             self.grid.heading("col5", text="Valor", anchor=CENTER)
-            self.grid.place(x=0,y=0,width=1170, height=850)
+            self.grid.place(x=110,y=0,width=1160, height=715)
             for row in dat:
                 self.grid.insert("",END, text= row[0], values=(row[1],row[2],row[3],row[4],row[5]))
-
 
         else:
             print("CHAOS16")        
             self.grid = ttk.Treeview(self, columns=("col1","col2","col3","col4","col5","col6","col7","col8","col9","col10","col11","col12","col13","col14"))        
             self.grid.column("#0",width=20)
             self.grid.column("col1",width=60, anchor=CENTER)
-            self.grid.column("col2",width=100, anchor=CENTER)
-            self.grid.column("col3",width=90, anchor=CENTER)
-            self.grid.column("col4",width=100, anchor=CENTER)
-            self.grid.column("col5",width=100, anchor=CENTER)
-            self.grid.column("col6",width=100, anchor=CENTER)
-            self.grid.column("col7",width=100, anchor=CENTER)
-            self.grid.column("col8",width=100, anchor=CENTER)
-            self.grid.column("col9",width=100, anchor=CENTER)
-            self.grid.column("col10",width=100, anchor=CENTER)
-            self.grid.column("col11",width=100, anchor=CENTER)
-            self.grid.column("col12",width=100, anchor=CENTER)
-            self.grid.column("col13",width=100, anchor=CENTER)
-            self.grid.column("col14",width=100, anchor=CENTER)
+            self.grid.column("col2",width=90, anchor=CENTER)
+            self.grid.column("col3",width=60, anchor=CENTER)
+            self.grid.column("col4",width=90, anchor=CENTER)
+            self.grid.column("col5",width=90, anchor=CENTER)
+            self.grid.column("col6",width=60, anchor=CENTER)
+            self.grid.column("col7",width=90, anchor=CENTER)
+            self.grid.column("col8",width=60, anchor=CENTER)
+            self.grid.column("col9",width=90, anchor=CENTER)
+            self.grid.column("col10",width=90, anchor=CENTER)
+            self.grid.column("col11",width=60, anchor=CENTER)
+            self.grid.column("col12",width=90, anchor=CENTER)
+            self.grid.column("col13",width=90, anchor=CENTER)
+            self.grid.column("col14",width=90, anchor=CENTER)
             
             self.grid.heading("#0", text="N", anchor=CENTER)
             self.grid.heading("col1", text="Fecha", anchor=CENTER)
@@ -453,12 +539,12 @@ class Ventana(Frame):
             self.grid.heading("col12", text="Abono2", anchor=CENTER)
             self.grid.heading("col13", text="VR/Fra", anchor=CENTER)
             self.grid.heading("col14", text="VR_Acum", anchor=CENTER)
-            self.grid.place(x=110,y=0,width=970, height=650)
+            self.grid.place(x=110,y=0,width=1460, height=715)
             for row in dat:
                 self.grid.insert("",END, text= row[0], values=(row[1],row[2],row[3],row[4],row[5]))
     def create_widgets(self):
         frame1 = Frame(self, bg="#20292E")
-        frame1.place(x=0,y=0,width=100, height=720)        
+        frame1.place(x=0,y=0,width=100, height=920)        
         v=80
         self.btnAdd=Button(frame1,text="Añadir", command=self.bAdd, bg="#20292E", fg="white",relief=FLAT, )
         self.btnAdd.place(x=0,y=140+v,width=110, height=30 )        
@@ -470,7 +556,7 @@ class Ventana(Frame):
         self.btnChan.place(x=0,y=650,width=110, height=30)    
 
         frame2 = Frame(self,bg="#2F3E45" )
-        frame2.place(x=100,y=0,width=1200, height=720)                        
+        frame2.place(x=100,y=0,width=1480, height=920)                        
         #lbl1 = Label(frame2,text="ID: ",bg="#2F3E45",fg="white")        
         #lbl1.place(x=30,y=5+100)        
         #self.txtID=Entry(frame2)
