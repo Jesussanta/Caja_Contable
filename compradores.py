@@ -37,7 +37,7 @@ class Client:
 
     def newTable (self,ID ):
         cur = self.cnn.cursor()
-        sql= "CREATE TABLE `compradores`.`{}` (`N` INT NOT NULL AUTO_INCREMENT,`Fecha` VARCHAR(10) NULL,`Remision` VARCHAR(45) NULL,`F_E` VARCHAR(45) NULL,`can` INT NULL,`testcol1` VARCHAR(45) NULL,`Client_Fisc` VARCHAR(45) NULL,`Valor` VARCHAR(10) NULL,`Fecha_ven` VARCHAR(10) NULL,`R_caja1` VARCHAR(20) NULL,`Fecha_a1` VARCHAR(10) NULL,`Abono1` VARCHAR(10) NULL,`R_caja2` VARCHAR(20) NULL,`Fecha_a2` VARCHAR(10) NULL,`Abono2` VARCHAR(10) NULL,PRIMARY KEY (`N`),UNIQUE INDEX `N_UNIQUE` (`N` ASC) VISIBLE);".format(ID)
+        sql= "CREATE TABLE `compradores`.`{}` (`N` INT NOT NULL AUTO_INCREMENT,`Fecha` VARCHAR(15) NULL,`Remision` VARCHAR(15) NULL,`F_E` VARCHAR(15) NULL,`Cant` INT NULL,`Cl_Fisc` VARCHAR(15) NULL,`VR_Fra` VARCHAR(15) NULL,`Fecha_Venc` VARCHAR(15) NULL,`R_Caja1` VARCHAR(15) NULL,`Fecha_a1` VARCHAR(15) NULL,`Abono1` INT NULL,`R_caja2` VARCHAR(15) NULL,`Fecha_a2` VARCHAR(15) NULL,`Abono2` INT NULL,`VR/Fra` VARCHAR(15) NULL,`VR_Acum` INT NULL,PRIMARY KEY (`N`),UNIQUE INDEX `N_UNIQUE` (`N` ASC) VISIBLE);".format(ID)
         cur.execute(sql)
         n=cur.rowcount
         self.cnn.commit()    

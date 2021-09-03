@@ -19,7 +19,7 @@ class Ventana(Frame):
         self.master = master
         self.pack()
         self.create_widgets()
-        self.habili(5)
+        #self.habili(5)
         
 
     def datos(self,k):
@@ -29,7 +29,7 @@ class Ventana(Frame):
 
     def addWin(self):
         winAdd = Toplevel(self)
-        winAdd.geometry("350x400")
+        winAdd.geometry("350x400+500+200")
         winAdd.title("Añadir")
         winAdd.resizable(False,False)
         va=95
@@ -132,7 +132,32 @@ class Ventana(Frame):
         data = self.Seller.buscar(self.seName.get(),3)
         self.cretGrip(data,1)
         self.winSeh.destroy()
+    def chaWin(self):
+        wincha = Toplevel(self)
+        wincha.geometry("350x400")
+        wincha.title("Buscar")
+        wincha.resizable(False,False)
+        va=95
+        vb=80
+        frame2 = Frame(wincha,bg="#2F3E45" )
+        frame2.place(x=0,y=0,width=350, height=400)                    
+        seLab=Label(wincha, text="Escribir nombre de cliente. ",bg="#2F3E45",fg="white")    
+        seLab.place(x=va-35,y=vb-30)  
+        self.chaName=Entry(frame2)
+        self.chaName.place(x=va,y=41+vb,width=160, height=20)    
+        self.wincha=wincha        
+        chaBot=Button(wincha, text="Cliente",command=self.chaWinBot,bg="#05867B", fg="white",relief=FLAT)
+        chaBot.place(x=va+90,y=280,width=60, height=30) 
 
+    def chaWinBot(self):
+        nam=self.chaName.get()
+        if len(nam.split(" ")) > 1:
+            nam=nam.replace(" ","_")
+        nam=nam.lower()
+
+        datos = self.Seller.STab(nam)
+        self.cretGrip(datos, 3)
+        self.wincha.destroy()
     def habilib(self,bn):
         if bn == 1:
             self.btnAdd.configure(bg="#2F3E45",fg="white")
@@ -318,12 +343,6 @@ class Ventana(Frame):
   
     def bAdd(self):
         self.addWin()
-        self.lbl4.config(text="")     
-        self.habili(1)    
-        self.habilib(1)
-        self.cBox()
-        self.txtID.focus()
-        self.cont = 1
         pass
     def bChan(self):        
         self.chaWin()
@@ -403,7 +422,7 @@ class Ventana(Frame):
             self.grid.column("col5",width=100, anchor=CENTER)
 
             self.grid.heading("#0", text="#", anchor=CENTER)
-            self.grid.heading("col1", text="Nombre", anchor=CENTER)
+            self.grid.heading("col1", text="Nombre", anchor=CENTER) 
             self.grid.heading("col2", text="ID", anchor=CENTER)
             self.grid.heading("col3", text="Celular", anchor=CENTER)
             self.grid.heading("col4", text="Descripcíon", anchor=CENTER)
@@ -432,7 +451,44 @@ class Ventana(Frame):
 
 
         else:
-            print("CHAOS16")
+            print("CHAOS16")        
+            self.grid = ttk.Treeview(self, columns=("col1","col2","col3","col4","col5","col6","col7","col8","col9","col10","col11","col12","col13","col14"))        
+            self.grid.column("#0",width=20)
+            self.grid.column("col1",width=60, anchor=CENTER)
+            self.grid.column("col2",width=100, anchor=CENTER)
+            self.grid.column("col3",width=90, anchor=CENTER)
+            self.grid.column("col4",width=100, anchor=CENTER)
+            self.grid.column("col5",width=100, anchor=CENTER)
+            self.grid.column("col6",width=100, anchor=CENTER)
+            self.grid.column("col7",width=100, anchor=CENTER)
+            self.grid.column("col8",width=100, anchor=CENTER)
+            self.grid.column("col9",width=100, anchor=CENTER)
+            self.grid.column("col10",width=100, anchor=CENTER)
+            self.grid.column("col11",width=100, anchor=CENTER)
+            self.grid.column("col12",width=100, anchor=CENTER)
+            self.grid.column("col13",width=100, anchor=CENTER)
+            self.grid.column("col14",width=100, anchor=CENTER)
+            
+            self.grid.heading("#0", text="N", anchor=CENTER)
+            self.grid.heading("col1", text="Fecha", anchor=CENTER)
+            self.grid.heading("col2", text="Remision", anchor=CENTER)
+            self.grid.heading("col3", text="F_E", anchor=CENTER)
+            self.grid.heading("col4", text="Cant", anchor=CENTER)
+            self.grid.heading("col4", text="Cl_Fisc", anchor=CENTER)
+            self.grid.heading("col5", text="VR_Fra", anchor=CENTER)
+            self.grid.heading("col6", text="Fecha_Venc", anchor=CENTER)
+            self.grid.heading("col7", text="R_caja1", anchor=CENTER)
+            self.grid.heading("col8", text="Fecha_a1", anchor=CENTER)
+            self.grid.heading("col9", text="Abono1", anchor=CENTER)      
+            self.grid.heading("col10", text="R_caja2", anchor=CENTER)
+            self.grid.heading("col11", text="Fecha_a2", anchor=CENTER)
+            self.grid.heading("col12", text="Abono2", anchor=CENTER)
+            self.grid.heading("col13", text="VR/Fra", anchor=CENTER)
+            self.grid.heading("col14", text="VR_Acum", anchor=CENTER)
+            self.grid.place(x=310,y=0,width=970, height=650)
+            for row in dat:
+                self.grid.insert("",END, text= row[0], values=(row[1],row[2],row[3],row[4],row[5]))
+
 
     def create_widgets(self):
         frame1 = Frame(self, bg="#20292E")
@@ -449,34 +505,13 @@ class Ventana(Frame):
 
         frame2 = Frame(self,bg="#2F3E45" )
         frame2.place(x=100,y=0,width=1200, height=720)                        
-        lbl1 = Label(frame2,text="ID: ",bg="#2F3E45",fg="white")        
-        lbl1.place(x=30,y=5+100)        
-        self.txtID=Entry(frame2)
-        self.txtID.place(x=30,y=25+100,width=160, height=20)                
-        lbl2 = Label(frame2,text="Nombre: ",bg="#2F3E45",fg="white")
+        #lbl1 = Label(frame2,text="ID: ",bg="#2F3E45",fg="white")        
+        #lbl1.place(x=30,y=5+100)        
+        #self.txtID=Entry(frame2)
+        #self.txtID.place(x=30,y=25+100,width=160, height=20)                
+        #lbl2 = Label(frame2,text="Nombre: ",bg="#2F3E45",fg="white")
 
-        lbl2.place(x=30,y=55+110)        
-        self.txtName=Entry(frame2)
-        self.txtName.place(x=30,y=75+110,width=160, height=20)        
-        lbl3 = Label(frame2,text="Valor: ",bg="#2F3E45",fg="white")
-        lbl3.place(x=30,y=105+120)        
-    
-        self.lbl4 = Label(frame2,text="",bg="#2F3E45",fg="white",font=( NORMAL, 11))
- 
-        self.lbl4.place(x=35,y=500)        
-
-        self.txtValue=Entry(frame2)
-        self.txtValue.place(x=30,y=125+120,width=160, height=20)        
-          
-        self.btnGuardar =  Button(frame2,text="Guardar", command=self.bSave, bg="#05867B", fg="white",relief=FLAT)
-        self.btnGuardar.place(x=70,y=160+200,width=60, height=30)        
-       
-        lbl5 = Label(frame2,text="Descripción: ",bg="#2F3E45",fg="white")
-        lbl5.place(x=120,y=670)        
-        self.txtDes=Entry(frame2)
-        self.txtDes.place(x=207,y=670,width=780, height=20)   
-        #self.cretGrip()
-
+        
 
         
         
