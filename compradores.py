@@ -105,11 +105,11 @@ class Client:
 
         return n    
 
-    def insTab (self,ID, Valor,des ):
+    def insTab (self,Nombre,FEc,Rems,F_E,Can,cl_f,Vr_fr,Fec_ven,VR_Ff):
 
         dt= str(self.dateNow())
         cur = self.cnn.cursor()
-        sql='''INSERT INTO `{}` (`ID`,`Fecha`, `Valor`, `Descripcion`) VALUES ('{}','{}', '{}', '{}');'''.format(ID, ID, dt, Valor,des)
+        sql='''INSERT INTO `compradores`.`{}` (`Fecha`, `Remision`, `F_E`, `Cant`, `Cl_Fisc`, `VR_Fra`, `Fecha_Venc`,  `VR/Fra`) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');'''.format(Nombre,FEc,Rems,F_E,Can,cl_f,Vr_fr,Fec_ven,VR_Ff)
         cur.execute(sql)
         n=cur.rowcount
         self.cnn.commit()    
