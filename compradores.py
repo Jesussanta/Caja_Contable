@@ -1,3 +1,4 @@
+from tkinter.constants import N
 import mysql.connector
 from datetime import datetime
 
@@ -37,13 +38,21 @@ class Client:
 
     def newTable (self,ID ):
         cur = self.cnn.cursor()
-        sql= "CREATE TABLE `compradores`.`{}` (`N` INT NOT NULL AUTO_INCREMENT,`Fecha` VARCHAR(15) NULL,`Remision` VARCHAR(15) NULL,`F_E` VARCHAR(15) NULL,`Cant` INT NULL,`Cl_Fisc` VARCHAR(15) NULL,`VR_Fra` VARCHAR(15) NULL,`Fecha_Venc` VARCHAR(15) NULL,`R_Caja1` VARCHAR(15) NULL,`Fecha_a1` VARCHAR(15) NULL,`Abono1` INT NULL,`R_caja2` VARCHAR(15) NULL,`Fecha_a2` VARCHAR(15) NULL,`Abono2` INT NULL,`VR/Fra` VARCHAR(15) NULL,`VR_Acum` INT NULL,PRIMARY KEY (`N`),UNIQUE INDEX `N_UNIQUE` (`N` ASC) VISIBLE);".format(ID)
+        sql= "CREATE TABLE `compradores`.`{}` (`N` INT NOT NULL AUTO_INCREMENT,`Fecha` VARCHAR(15) NULL,`Remision` VARCHAR(15) NULL,`F_E` VARCHAR(15) NULL,`Cant` INT NULL,`Cl_Fisc` VARCHAR(15) NULL,`VR_Fra` VARCHAR(15) NULL,`Fecha_Venc` VARCHAR(15) NULL,`R_Caja1` VARCHAR(15) NULL,`Fecha_a1` VARCHAR(15) NULL,`Abono1` INT NULL,`R_caja2` VARCHAR(15) NULL,`Fecha_a2` VARCHAR(15) NULL,`Abono2` INT NULL,`VF_Fra` VARCHAR(15) NULL,`VR_Acum` INT NULL,PRIMARY KEY (`N`),UNIQUE INDEX `N_UNIQUE` (`N` ASC) VISIBLE);".format(ID)
         cur.execute(sql)
         n=cur.rowcount
         self.cnn.commit()    
         cur.close()
         
         return n
+    def B_esp(self,n,db,es):
+        cur = self.cnn.cursor()
+        sql = "SELECT {} FROM {} WHERE N = {}".format(es,db,n)
+        cur.execute(sql)
+        datos = cur.fetchall()
+        cur.close()    
+        return datos
+
 
     def consulta (self,s):
         cur = self.cnn.cursor()
@@ -109,7 +118,7 @@ class Client:
 
         dt= str(self.dateNow())
         cur = self.cnn.cursor()
-        sql='''INSERT INTO `compradores`.`{}` (`Fecha`, `Remision`, `F_E`, `Cant`, `Cl_Fisc`, `VR_Fra`, `Fecha_Venc`,  `VR/Fra`) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');'''.format(Nombre,FEc,Rems,F_E,Can,cl_f,Vr_fr,Fec_ven,VR_Ff)
+        sql='''INSERT INTO `compradores`.`{}` (`Fecha`, `Remision`, `F_E`, `Cant`, `Cl_Fisc`, `VR_Fra`, `Fecha_Venc`,  `VF_Fra`) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}');'''.format(Nombre,FEc,Rems,F_E,Can,cl_f,Vr_fr,Fec_ven,VR_Ff)
         cur.execute(sql)
         n=cur.rowcount
         self.cnn.commit()    
@@ -138,6 +147,30 @@ class Client:
     def modifica (self, ID,Valor,s ):
         cur = self.cnn.cursor()
         sql='''UPDATE `{}` SET `Valor` = '{}' WHERE `ID`= {}'''.format(s,Valor,ID)
+        cur.execute(sql)
+        n=cur.rowcount
+        self.cnn.commit()    
+        cur.close()
+        return n   
+    def abono1 (self, Nom,R_c1,F_1,A1,VR_fac,Var_ac,N ):
+        cur = self.cnn.cursor()
+        sql='''UPDATE `compradores`.`{}` SET `R_Caja1` = '{}', `Fecha_a1` = '{}', `Abono1` = '{}', `VF_Fra` = '{}', `VR_Acum` = '{}' WHERE (`N` = '{}');'''.format(Nom,R_c1,F_1,A1,VR_fac,Var_ac,N )
+        cur.execute(sql)
+        n=cur.rowcount
+        self.cnn.commit()    
+        cur.close()
+        return n   
+    def abono2 (self, Nom,R_c1,F_1,A1,VR_fac,Var_ac,N ):
+        cur = self.cnn.cursor()
+        sql='''UPDATE `compradores`.`{}` SET `R_Caja2` = '{}', `Fecha_a2` = '{}', `Abono2` = '{}', `VF_Fra` = '{}', `VR_Acum` = '{}' WHERE (`N` = '{}');'''.format(Nom,R_c1,F_1,A1,VR_fac,Var_ac,N )
+        cur.execute(sql)
+        n=cur.rowcount
+        self.cnn.commit()    
+        cur.close()
+        return n   
+    def acumula(self,Name,N,Val):
+        cur = self.cnn.cursor()
+        sql='''UPDATE `compradores`.`{}` SET `VR_Acum` = '{}' WHERE (`N` = '{}');'''.format(Name,Val,N)
         cur.execute(sql)
         n=cur.rowcount
         self.cnn.commit()    

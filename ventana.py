@@ -2,6 +2,7 @@ from logging import disable
 from tkinter import *
 from tkinter import ttk
 from fpdf import FPDF
+from mysql.connector.utils import validate_normalized_unicode_string
 from compradores import * 
 
 class Ventana(Frame):
@@ -161,6 +162,7 @@ class Ventana(Frame):
         frame2 = Frame(winAb,bg="#2F3E45" )
         frame2.place(x=0,y=0,width=580, height=200)       
         v=20
+        nam=self.chaName.get()
         if c==1:
             chaLab6=Label(winAb, text="N",bg="#2F3E45",fg="white")    
             chaLab6.place(x=v,y=10)  
@@ -181,7 +183,7 @@ class Ventana(Frame):
             self.V_A=Entry(frame2)
             self.V_A.place(x=330+v,y=50,width=100, height=20)     
             cha=Button(winAb, text="Aplicar",command=self.cha,bg="#05867B", fg="white",relief=FLAT)
-            cha.place(x=440+v,y=40,width=60, height=30) 
+            cha.place(x=460+v,y=30,width=60, height=30) 
 
             
         if c ==2:
@@ -204,19 +206,65 @@ class Ventana(Frame):
             self.V_A=Entry(frame2)
             self.V_A.place(x=330+v,y=50,width=100, height=20)   
             cha2=Button(winAb, text="Aplicar",command=self.cha2,bg="#05867B", fg="white",relief=FLAT)
-            cha2.place(x=440+v,y=40,width=60, height=30) 
+            cha2.place(x=460+v,y=30,width=60, height=30) 
 
               
         self.winAb = winAb     
     def cha(self):
-        print("Lokiar")
+        N=self.gri_N.get()
+        if N == "1" :
+            v_ac=0
+        else:
+            nv = int(N)-1
+            vac=self.Seller.B_esp(str(nv),self.nam,"VR_Acum")
+            if vac[0][0] is None:
+                v_ac=0
+            else:
+                v_ac=vac[0][0]
+        
+        v_f=self.Seller.B_esp(N,self.nam,"VF_Fra")
+        v_fac=v_f[0][0]
+        
+        ab1=int(self.V_A.get())
+        v_fac=int(v_fac)-ab1
+        VAC=int(v_ac)+int(v_fac)
+        self.Seller.abono1(self.nam,self.griRC_1.get(),self.griFa_1.get(),str(ab1),str(v_fac),str(VAC),N)
+        datos = self.Seller.STab(self.nam)
+        self.cretGrip(datos,3)
+        print(datos)
+        self.acumlate(N)
+        self.winAb.destroy()
+
     def cha2 (self):
-        print("Que dice?")
+        N=self.gri_N.get()
+        if N == "1" :
+            v_ac=0
+        else:
+            nv = int(N)-1
+            vac=self.Seller.B_esp(str(nv),self.nam,"VR_Acum")
+            if vac[0][0] is None:
+                v_ac=0
+            else:
+                v_ac=vac[0][0]
+       
+        v_f=self.Seller.B_esp(N,self.nam,"VF_Fra")
+        v_fac=v_f[0][0]
+        
+        ab1=int(self.V_A.get())
+        v_fac=int(v_fac)-ab1
+        VAC=int(v_ac)+int(v_fac)
+        self.Seller.abono2(self.nam,self.griRC_1.get(),self.griFa_1.get(),str(ab1),str(v_fac),str(VAC),N)
+        datos = self.Seller.STab(self.nam)
+        self.cretGrip(datos,3)
+        print(datos)
+        self.acumlate(N)
+        self.winAb.destroy()
     def chaWinBot2(self):
         nam=self.chaName.get()
         if len(nam.split(" ")) > 1:
             nam=nam.replace(" ","_")
         nam=nam.lower()
+        self.nam=nam
         datos = self.Seller.STab(nam)
         self.cretGrip(datos,3)
         self.win_ab(2)
@@ -226,7 +274,9 @@ class Ventana(Frame):
         if len(nam.split(" ")) > 1:
             nam=nam.replace(" ","_")
         nam=nam.lower()
+        self.nam=nam
         datos = self.Seller.STab(nam)
+        
         self.cretGrip(datos,3)
         self.win_ab(1)
         self.winCha.destroy()
@@ -287,18 +337,36 @@ class Ventana(Frame):
         self.winGrip=winGrip     
 
         GripBot=Button(winGrip, text="Añadir",command=self.griWinBot,bg="#05867B", fg="white",relief=FLAT)
-        GripBot.place(x=770,y=30,width=60, height=30) 
+        GripBot.place(x=800,y=30,width=60, height=30) 
     def griWinBot(self):
         
         
         self.Seller.insTab(self.nam,self.griFech.get(),self.griRe.get(),self.griF_E.get(),self.gricant.get(),self.griCL.get(),self.griVr.get(),self.griF_V.get(),self.griVr.get())
         datos = self.Seller.STab(self.nam)
-        print(datos)
-        self.clGrip()
-        self.cretGrip(datos,3)
         
+        N=str(datos[-1][0])
+        if N != "1" :
+            V=int(self.acumlate(N))
+        else:
+            V=0
+        self.clGrip()
+        
+        
+        datos = self.Seller.STab(self.nam)
+        self.cretGrip(datos,3)
         self.winGrip.destroy()
-    
+    def acumlate(self,N):
+        if N == "1" :
+            v_ac=0
+        else:
+            nv = int(N)-1
+            vac=self.Seller.B_esp(str(nv),self.nam,"VR_Acum")
+            if vac[0][0] is None:
+                v_ac=0
+            else:
+                v_ac=vac[0][0]
+        self.Seller.acumula(self.nam,str(N),str(v_ac))
+        return v_ac
     def habilib(self,bn):
         if bn == 1: #add
             self.btnAdd.configure(bg="#2F3E45",fg="white")
@@ -388,7 +456,10 @@ class Ventana(Frame):
         pdf = FPDF(orientation= 'P', unit= 'mm', format= 'A4')
         pdf.add_page()
         pdf.add_font('Popp', '', 'Poppins-Regular.ttf', uni=True)
-        pdf.image('F.png', x = 10, y = 10, w = 190, h = 280)
+        if self.So == "s_vc":
+            pdf.image('F_vc.png', x = 10, y = 10, w = 190, h = 280)
+        else:
+            pdf.image('F_oc.png', x = 10, y = 10, w = 190, h = 280)
         pdf.set_font('Popp', '', 15)
         f1= str(self.So+ str(Nu))
         if len(f) > 8:
@@ -458,6 +529,7 @@ class Ventana(Frame):
         self.habilib(1)  
     def bChan(self):        
         self.chaWin()
+        self.clGrip()
         self.habilib(3)    
     def bDelet(self):
         self.delWin()
