@@ -16,7 +16,7 @@ class Client:
     def dateNow(self):
         now = datetime.now()
         # dd/mm/YY H:M:S
-        dt = now.strftime("%d/%m/%Y %H:%M:%S")
+        dt = now.strftime("%d/%m/%Y")
         return dt
 
 
@@ -38,7 +38,7 @@ class Client:
 
     def newTable (self,ID ):
         cur = self.cnn.cursor()
-        sql= "CREATE TABLE `compradores`.`{}` (`N` INT NOT NULL AUTO_INCREMENT,`Fecha` VARCHAR(15) NULL,`Remision` VARCHAR(15) NULL,`F_E` VARCHAR(15) NULL,`Cant` INT NULL,`Cl_Fisc` VARCHAR(15) NULL,`VR_Fra` VARCHAR(15) NULL,`Fecha_Venc` VARCHAR(15) NULL,`R_Caja1` VARCHAR(15) NULL,`Fecha_a1` VARCHAR(15) NULL,`Abono1` INT NULL,`R_caja2` VARCHAR(15) NULL,`Fecha_a2` VARCHAR(15) NULL,`Abono2` INT NULL,`VF_Fra` VARCHAR(15) NULL,`VR_Acum` INT NULL,PRIMARY KEY (`N`),UNIQUE INDEX `N_UNIQUE` (`N` ASC) VISIBLE);".format(ID)
+        sql= "CREATE TABLE `compradores`.`{}` (`N` INT NOT NULL AUTO_INCREMENT,`Fecha` DATE NULL,`Remision` VARCHAR(15) NULL,`F_E` VARCHAR(15) NULL,`Cant` INT NULL,`Cl_Fisc` VARCHAR(15) NULL,`VR_Fra` VARCHAR(15) NULL,`Fecha_Venc` DATE NULL,`R_Caja1` VARCHAR(15) NULL,`Fecha_a1` DATE NULL,`Abono1` INT NULL,`R_caja2` VARCHAR(15) NULL,`Fecha_a2` DATE NULL,`Abono2` INT NULL,`VF_Fra` VARCHAR(15) NULL,`VR_Acum` INT NULL,PRIMARY KEY (`N`),UNIQUE INDEX `N_UNIQUE` (`N` ASC) VISIBLE);".format(ID)
         cur.execute(sql)
         n=cur.rowcount
         self.cnn.commit()    
@@ -85,7 +85,7 @@ class Client:
             cur.close()    
         else:
             cur = self.cnn.cursor()
-            sql= "SELECT * FROM s_vc WHERE Nombre = '{}'".format(Id)
+            sql= "SELECT * FROM s_vc WHERE ID = '{}'".format(Id)
             cur.execute(sql)
             datos = cur.fetchone()
             cur.close()    
@@ -141,7 +141,6 @@ class Client:
         n=cur.rowcount
         self.cnn.commit()    
         cur.close()
-        self.DeTable(Id)
         return n   
 
     def modifica (self, ID,Valor,s ):
@@ -175,4 +174,12 @@ class Client:
         n=cur.rowcount
         self.cnn.commit()    
         cur.close()
+
+        cur = self.cnn.cursor()
+        sql='''UPDATE `compradores`.`s_vc` SET `Valor` = '{}' WHERE (`Nombre` = '{}');'''.format(Val,Name)
+        cur.execute(sql)
+        n=cur.rowcount
+        self.cnn.commit()    
+        cur.close()
+
         return n   

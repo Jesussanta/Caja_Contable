@@ -20,7 +20,7 @@ class Ventana(Frame):
 
     def datos(self,k):
         datos = self.Seller.consulta(k)
-        print(datos)
+        #print(datos)
         self.cretGrip(datos,2)
 
     def addWin(self):
@@ -93,14 +93,16 @@ class Ventana(Frame):
         addBot=Button(winDel, text="Aceptar",command=self.delWinBot,bg="#05867B", fg="white",relief=FLAT)
         addBot.place(x=va+50,y=280,width=60, height=30) 
     def delWinBot(self):
-        nam=self.EnName.get()
+        nam=self.deName.get()
         if len(nam.split(" ")) > 1:
             nam=nam.replace(" ","_")
         nam=nam.lower()
-
+        print(nam)
         self.Seller.elimina(self.delID.get())
         self.Seller.DeTable(nam)
-        self.winAdd.destroy()
+        #self.clGrip()
+        self.datos("s_vc")
+        self.winDel.destroy()
     
     def sehWin(self):
         winSeh = Toplevel(self)
@@ -116,20 +118,25 @@ class Ventana(Frame):
         self.seName=Entry(frame2)
         self.seName.place(x=va,y=41+vb,width=160, height=20)    
         self.winSeh=winSeh
-        addBot=Button(winSeh, text="Factura",command=self.seWinBot,bg="#05867B", fg="white",relief=FLAT)
+        addBot=Button(winSeh, text="Todo",command=self.seWinBot,bg="#05867B", fg="white",relief=FLAT)
         addBot.place(x=va,y=280,width=60, height=30) 
         seBot=Button(winSeh, text="Cliente",command=self.seWinBot1,bg="#05867B", fg="white",relief=FLAT)
         seBot.place(x=va+90,y=280,width=60, height=30) 
         self.seName.focus()
 
     def seWinBot(self):
-        data = self.Seller.buscar(self.seName.get(),1)
-        self.Name = self.seName.get()
-        self.cretGrip(data,1)
+        #data = self.Seller.buscar(self.seName.get(),1)
+        #self.Name = self.seName.get()
+        #self.cretGrip(data,1)
+        self.datos("s_vc")
         self.winSeh.destroy()
     def seWinBot1(self):
-        data = self.Seller.buscar(self.seName.get(),3)
-        self.cretGrip(data,1)
+        nam=self.seName.get()
+        if len(nam.split(" ")) > 1:
+            nam=nam.replace(" ","_")
+        nam=nam.lower()
+        datos = self.Seller.STab(nam)
+        self.cretGrip(datos,3)
         self.winSeh.destroy()
 
     def chaWin(self):
@@ -338,9 +345,9 @@ class Ventana(Frame):
 
         GripBot=Button(winGrip, text="Añadir",command=self.griWinBot,bg="#05867B", fg="white",relief=FLAT)
         GripBot.place(x=800,y=30,width=60, height=30) 
+    
     def griWinBot(self):
-        
-        
+               
         self.Seller.insTab(self.nam,self.griFech.get(),self.griRe.get(),self.griF_E.get(),self.gricant.get(),self.griCL.get(),self.griVr.get(),self.griF_V.get(),self.griVr.get())
         datos = self.Seller.STab(self.nam)
         
@@ -350,7 +357,6 @@ class Ventana(Frame):
         else:
             V=0
         self.clGrip()
-        
         
         datos = self.Seller.STab(self.nam)
         self.cretGrip(datos,3)
