@@ -125,19 +125,62 @@ class Ventana(Frame):
         self.seName.focus()
 
     def seWinBot(self):
-        #data = self.Seller.buscar(self.seName.get(),1)
-        #self.Name = self.seName.get()
-        #self.cretGrip(data,1)
-        self.datos("s_vc")
-        self.winSeh.destroy()
-    def seWinBot1(self):
         nam=self.seName.get()
         if len(nam.split(" ")) > 1:
-            nam=nam.replace(" ","_")
+                nam=nam.replace(" ","_")
         nam=nam.lower()
-        datos = self.Seller.STab(nam)
-        self.cretGrip(datos,3)
+        self.namer=nam
+        self.resum()
         self.winSeh.destroy()
+               
+    def seWinBot1(self):
+        nam=self.seName.get()
+        if nam == '':
+            self.datos("s_vc")
+            self.winSeh.destroy()
+        
+        else:        
+            if len(nam.split(" ")) > 1:
+                nam=nam.replace(" ","_")
+            nam=nam.lower()
+            datos = self.Seller.STab(nam)
+            self.cretGrip(datos,3)
+            self.winSeh.destroy()
+    def resum(self):
+        winRes = Toplevel(self)
+        winRes.geometry("350x400")
+        winRes.title("Resumen")
+        winRes.resizable(False,False)
+        va=95
+        vb=80
+        frame2 = Frame(winRes,bg="#2F3E45" )
+        frame2.place(x=0,y=0,width=350, height=400)                    
+        delLab=Label(winRes, text="Ingresar fecha inicial y final \n para la busqueda (yyyy/mm/dd)",bg="#2F3E45",fg="white")    
+        delLab.place(x=va-35,y=vb-30)  
+        serStart=Label(winRes, text="Inicio",bg="#2F3E45",fg="white")
+        serStart.place(x=va,y=20+vb)     
+        self.seSt=Entry(frame2)
+        self.seSt.place(x=va,y=41+vb,width=160, height=20)    
+        delID=Label(winRes, text="Fin",bg="#2F3E45",fg="white")
+        delID.place(x=va,y=70+vb)     
+        self.seEnd=Entry(frame2)
+        self.seEnd.place(x=va,y=91+vb,width=160, height=20)    
+        self.winRes=winRes
+        self.seSt.focus()
+        addBot=Button(winRes, text="Busca",command=self.ResWinBot,bg="#05867B", fg="white",relief=FLAT)
+        addBot.place(x=va+50,y=280,width=60, height=30) 
+
+    def ResWinBot(self):
+        ini=self.seSt.get()
+        end=self.seEnd.get()
+        print(self.namer+ini+end)
+        datos = self.Seller.resum(self.namer,str(ini),str(end))
+        self.cretGrip(datos,3)
+        self.winRes.destroy()
+
+
+
+
 
     def chaWin(self):
         winCha = Toplevel(self)
@@ -588,7 +631,7 @@ class Ventana(Frame):
     def cretGrip(self,dat,k):
        
         if k ==1: #buscart
-            print("holos5")
+            #print("holos5")
             self.grid = ttk.Treeview(self, columns=("col1","col2","col3","col4","col5"))        
             self.grid.column("#0",width=20)
             self.grid.column("col1",width=60, anchor=CENTER)
@@ -606,7 +649,7 @@ class Ventana(Frame):
             self.grid.place(x=110,y=0,width=1460, height=715)
             self.grid.insert("",END, text= str(dat[0]), values=(str(dat[1]),str(dat[2]),str(dat[3]),str(dat[4]),str(dat[5])))
         elif k ==2:
-            print("holosasd5")
+            #print("holosasd5")
             self.grid = ttk.Treeview(self, columns=("col1","col2","col3","col4","col5"))        
             self.grid.column("#0",width=20)
             self.grid.column("col1",width=60, anchor=CENTER)
@@ -663,7 +706,7 @@ class Ventana(Frame):
             self.grid.heading("col15", text="VR_Acum", anchor=CENTER)
             self.grid.place(x=110,y=0,width=1460, height=715)
             for row in dat:
-                self.grid.insert("",END, text= row[0], values=(row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15]))
+                self.grid.insert("",END, text= str(row[0]), values=(str(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]),str(row[6]),str(row[7]),str(row[8]),str(row[9]),str(row[10]),str(row[11]),str(row[12]),str(row[13]),str(row[14]),str(row[15])))
     def create_widgets(self):
         frame1 = Frame(self, bg="#20292E")
         frame1.place(x=0,y=0,width=100, height=920)        

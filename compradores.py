@@ -75,6 +75,13 @@ class Client:
             datos = cur.fetchone()
             cur.close()    
         return datos
+    def resum (self,na,ini,end):
+            cur = self.cnn.cursor()
+            sql="SELECT * FROM `compradores`.`{}` WHERE Fecha >= '{}' AND Fecha <= '{}';".format(na,ini,end)
+            cur.execute(sql)
+            datos = cur.fetchone()
+            cur.close()    
+            return datos
 
     def buscar (self, Id,k):
         if k == 1:
@@ -141,6 +148,7 @@ class Client:
         n=cur.rowcount
         self.cnn.commit()    
         cur.close()
+        
         return n   
 
     def modifica (self, ID,Valor,s ):
