@@ -118,7 +118,7 @@ class Ventana(Frame):
         self.seName=Entry(frame2)
         self.seName.place(x=va,y=41+vb,width=160, height=20)    
         self.winSeh=winSeh
-        addBot=Button(winSeh, text="Todo",command=self.seWinBot,bg="#05867B", fg="white",relief=FLAT)
+        addBot=Button(winSeh, text="Fechas",command=self.seWinBot,bg="#05867B", fg="white",relief=FLAT)
         addBot.place(x=va,y=280,width=60, height=30) 
         seBot=Button(winSeh, text="Cliente",command=self.seWinBot1,bg="#05867B", fg="white",relief=FLAT)
         seBot.place(x=va+90,y=280,width=60, height=30) 

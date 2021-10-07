@@ -76,11 +76,13 @@ class Client:
             cur.close()    
         return datos
     def resum (self,na,ini,end):
-            cur = self.cnn.cursor()
+            curt = self.cnn.cursor()
             sql="SELECT * FROM `compradores`.`{}` WHERE Fecha >= '{}' AND Fecha <= '{}';".format(na,ini,end)
-            cur.execute(sql)
-            datos = cur.fetchone()
-            cur.close()    
+            
+            #sql = "SELECT * FROM `compradores`.`testa` WHERE Fecha >= '2000-01-02' and Fecha <= '2000-01-05'"
+            curt.execute(sql)
+            datos = curt.fetchall()
+            curt.close()    
             return datos
 
     def buscar (self, Id,k):
