@@ -1,7 +1,7 @@
 from logging import disable
 from tkinter import *
 from tkinter import ttk
-from fpdf import FPDF
+#from fpdf import FPDF
 from mysql.connector.utils import validate_normalized_unicode_string
 from compradores import * 
 
@@ -177,10 +177,6 @@ class Ventana(Frame):
         datos = self.Seller.resum(self.namer,str(ini),str(end))
         self.cretGrip(datos,3)
         self.winRes.destroy()
-
-
-
-
 
     def chaWin(self):
         winCha = Toplevel(self)
@@ -631,7 +627,7 @@ class Ventana(Frame):
     def cretGrip(self,dat,k):
        
         if k ==1: #buscart
-            #print("holos5")
+            print("holos5")
             self.grid = ttk.Treeview(self, columns=("col1","col2","col3","col4","col5"))        
             self.grid.column("#0",width=20)
             self.grid.column("col1",width=60, anchor=CENTER)
@@ -649,7 +645,7 @@ class Ventana(Frame):
             self.grid.place(x=110,y=0,width=1460, height=715)
             self.grid.insert("",END, text= str(dat[0]), values=(str(dat[1]),str(dat[2]),str(dat[3]),str(dat[4]),str(dat[5])))
         elif k ==2:
-            #print("holosasd5")
+            print("holosasd5")
             self.grid = ttk.Treeview(self, columns=("col1","col2","col3","col4","col5"))        
             self.grid.column("#0",width=20)
             self.grid.column("col1",width=60, anchor=CENTER)
@@ -664,9 +660,19 @@ class Ventana(Frame):
             self.grid.heading("col3", text="Celular", anchor=CENTER)
             self.grid.heading("col4", text="Descripcíon", anchor=CENTER)
             self.grid.heading("col5", text="Valor", anchor=CENTER)
-            self.grid.place(x=110,y=0,width=1460, height=715)
+            self.grid.place(x=110,y=0,width=1460, height=680)
             for row in dat:
                 self.grid.insert("",END, text= row[0], values=(row[1],row[2],row[3],row[4],row[5]))
+            
+            self.resumen=Label(self, text="Acumulado:",bg="#2F3E45",fg="white")   
+            self.resumen.place(x=1400,y=685)  
+            resu=0
+            for vas in range(len(dat)):
+                asd=int(dat[vas][-1])+ int(resu)
+                resu=asd
+            self.resumen=Label(self, text=resu,bg="#2F3E45",fg="white")   
+            self.resumen.place(x=1480,y=685)  
+
 
         else:
             print("CHAOS16")        

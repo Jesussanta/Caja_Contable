@@ -136,7 +136,7 @@ class Client:
 
     def insertat (self,Nombre, ID,Cel, Valor,des ):
         cur = self.cnn.cursor()
-        sql='''INSERT INTO `s_vc` (`Nombre`, `ID`, `Celular`, `Des`, `Valor`) VALUES ('{}', '{}', '{}', '{}', '{}');'''.format(Nombre,ID,Cel,des,Valor)
+        sql='''INSERT INTO `s_vc` (`Nombre`, `ID`, `Celular`,`Des` ,`Valor`) VALUES ('{}', '{}', '{}', '{}', '{}');'''.format(Nombre,ID,Cel,des,Valor)
         cur.execute(sql)
         n=cur.rowcount
         self.cnn.commit()    
