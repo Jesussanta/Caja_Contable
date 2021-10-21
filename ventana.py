@@ -733,7 +733,7 @@ class Ventana(Frame):
         #self.txtID=Entry(frame2)
         #self.txtID.place(x=30,y=25+100,width=160, height=20)                
         #lbl2 = Label(frame2,text="Nombre: ",bg="#2F3E45",fg="white")
-
+print("Holis")
 V1 = Tk()
 V1.wm_title("Caja")
 app = Ventana(V1) 
