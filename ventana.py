@@ -258,52 +258,39 @@ class Ventana(Frame):
         self.winAb = winAb     
     def cha(self):
         N=self.gri_N.get()
-        if N == "1" :
-            v_ac=0
-        else:
-            nv = int(N)-1
-            vac=self.Seller.B_esp(str(nv),self.nam,"VR_Acum")
-            if vac[0][0] is None:
-                v_ac=0
-            else:
-                v_ac=vac[0][0]
-        
+                
         v_f=self.Seller.B_esp(N,self.nam,"VF_Fra")
         v_fac=v_f[0][0]
-        
         ab1=int(self.V_A.get())
         v_fac=int(v_fac)-ab1
-        VAC=int(v_ac)+int(v_fac)
-        self.Seller.abono1(self.nam,self.griRC_1.get(),self.griFa_1.get(),str(ab1),str(v_fac),str(VAC),N)
+        
+        self.Seller.abono1(self.nam,self.griRC_1.get(),self.griFa_1.get(),str(ab1),str(v_fac),N)
+                
         datos = self.Seller.STab(self.nam)
-        self.cretGrip(datos,3)
-        print(datos)
-        self.acumlate(N)
+        datos_f=self.acumlate(self.nam,datos)
+        self.cretGrip(datos_f,3)
+        
+        #self.acumlate(N)
         self.winAb.destroy()
 
     def cha2 (self):
         N=self.gri_N.get()
-        if N == "1" :
-            v_ac=0
-        else:
-            nv = int(N)-1
-            vac=self.Seller.B_esp(str(nv),self.nam,"VR_Acum")
-            if vac[0][0] is None:
-                v_ac=0
-            else:
-                v_ac=vac[0][0]
-       
+        
         v_f=self.Seller.B_esp(N,self.nam,"VF_Fra")
         v_fac=v_f[0][0]
-        
         ab1=int(self.V_A.get())
         v_fac=int(v_fac)-ab1
-        VAC=int(v_ac)+int(v_fac)
-        self.Seller.abono2(self.nam,self.griRC_1.get(),self.griFa_1.get(),str(ab1),str(v_fac),str(VAC),N)
+        #VAC=int(v_ac)+int(v_fac)
+    
+        self.Seller.abono2(self.nam,self.griRC_1.get(),self.griFa_1.get(),str(ab1),str(v_fac),N)
+        #s=self.Seller.varac(self.nam,N,VAC)
+        #print(s)
         datos = self.Seller.STab(self.nam)
-        self.cretGrip(datos,3)
-        print(datos)
-        self.acumlate(N)
+        datos_f=self.acumlate(self.nam,datos)
+        
+        
+        self.cretGrip(datos_f,3)
+        #print(datos)
         self.winAb.destroy()
     def chaWinBot2(self):
         nam=self.chaName.get()
@@ -321,8 +308,7 @@ class Ventana(Frame):
             nam=nam.replace(" ","_")
         nam=nam.lower()
         self.nam=nam
-        datos = self.Seller.STab(nam)
-        
+        datos = self.Seller.STab(nam)        
         self.cretGrip(datos,3)
         self.win_ab(1)
         self.winCha.destroy()
@@ -400,18 +386,26 @@ class Ventana(Frame):
         datos = self.Seller.STab(self.nam)
         self.cretGrip(datos,3)
         self.winGrip.destroy()
-    def acumlate(self,N):
-        if N == "1" :
-            v_ac=0
-        else:
-            nv = int(N)-1
-            vac=self.Seller.B_esp(str(nv),self.nam,"VR_Acum")
-            if vac[0][0] is None:
-                v_ac=0
-            else:
-                v_ac=vac[0][0]
-        self.Seller.acumula(self.nam,str(N),str(v_ac))
-        return v_ac
+    def acumlate(self,N,datos):
+        data=self.Seller.acumula(N)
+        a=[]
+        c=[]
+        datosf=[]
+        for y in range(len(datos)):
+            datosf.append(list(datos[y]))
+        print(type(datosf))
+        print(type(datosf[1]))
+
+        for i in range(len(data)):
+                a.append(data[i][0])
+        b=0
+        for t in range (len(a)):
+                b=b+int(a[t])
+                c.append(b)
+        for l in range(len(datosf)):
+            datosf [l][-1]=str(c[l])
+        print(c)
+        return datosf
     def habilib(self,bn):
         if bn == 1: #add
             self.btnAdd.configure(bg="#2F3E45",fg="white")
@@ -574,8 +568,9 @@ class Ventana(Frame):
         self.habilib(1)  
     def bChan(self):        
         self.chaWin()
-        self.clGrip()
+       # self.clGrip()
         self.habilib(3)    
+        self.datos("s_vc")
     def bDelet(self):
         self.delWin()
         self.habilib(2)   
@@ -710,9 +705,13 @@ class Ventana(Frame):
             self.grid.heading("col13", text="Abono2", anchor=CENTER)
             self.grid.heading("col14", text="VR/Fra", anchor=CENTER)
             self.grid.heading("col15", text="VR_Acum", anchor=CENTER)
-            self.grid.place(x=110,y=0,width=1460, height=715)
+            self.grid.place(x=110,y=0,width=1460, height=680)
             for row in dat:
                 self.grid.insert("",END, text= str(row[0]), values=(str(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]),str(row[6]),str(row[7]),str(row[8]),str(row[9]),str(row[10]),str(row[11]),str(row[12]),str(row[13]),str(row[14]),str(row[15])))
+            self.resumen=Label(self, text="Acumulado:",bg="#2F3E45",fg="white")   
+            self.resumen.place(x=1400,y=685)  
+           
+            
     def create_widgets(self):
         frame1 = Frame(self, bg="#20292E")
         frame1.place(x=0,y=0,width=100, height=920)        

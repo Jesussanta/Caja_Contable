@@ -161,30 +161,37 @@ class Client:
         self.cnn.commit()    
         cur.close()
         return n   
-    def abono1 (self, Nom,R_c1,F_1,A1,VR_fac,Var_ac,N ):
+    def varac(self,Nom,N,var):
         cur = self.cnn.cursor()
-        sql='''UPDATE `compradores`.`{}` SET `R_Caja1` = '{}', `Fecha_a1` = '{}', `Abono1` = '{}', `VF_Fra` = '{}', `VR_Acum` = '{}' WHERE (`N` = '{}');'''.format(Nom,R_c1,F_1,A1,VR_fac,Var_ac,N )
+        sql = "UPDATE `compradores`.`{}` SET `VR_Acum` = '{}' WHERE (`N` = '{}');".format(Nom,var,N)
+        cur.execute(sql)
+        self.cnn.commit()
+        return "sip"
+        
+    def abono1 (self, Nom,R_c1,F_1,A1,VR_fac,N ):
+        cur = self.cnn.cursor()
+        sql='''UPDATE `compradores`.`{}` SET `R_Caja1` = '{}', `Fecha_a1` = '{}', `Abono1` = '{}', `VF_Fra` = '{}' WHERE (`N` = '{}');'''.format(Nom,R_c1,F_1,A1,VR_fac,N )
         cur.execute(sql)
         n=cur.rowcount
         self.cnn.commit()    
         cur.close()
         return n   
-    def abono2 (self, Nom,R_c1,F_1,A1,VR_fac,Var_ac,N ):
+    def abono2 (self, Nom,R_c1,F_1,A1,VR_fac,N ):
         cur = self.cnn.cursor()
-        sql='''UPDATE `compradores`.`{}` SET `R_Caja2` = '{}', `Fecha_a2` = '{}', `Abono2` = '{}', `VF_Fra` = '{}', `VR_Acum` = '{}' WHERE (`N` = '{}');'''.format(Nom,R_c1,F_1,A1,VR_fac,Var_ac,N )
+        sql='''UPDATE `compradores`.`{}` SET `R_Caja2` = '{}', `Fecha_a2` = '{}', `Abono2` = '{}', `VF_Fra` = '{}' WHERE (`N` = '{}');'''.format(Nom,R_c1,F_1,A1,VR_fac,N )
         cur.execute(sql)
         n=cur.rowcount
         self.cnn.commit()    
         cur.close()
         return n   
-    def acumula(self,Name,N,Val):
+    def acumula(self,Name):
         cur = self.cnn.cursor()
-        sql='''UPDATE `compradores`.`{}` SET `VR_Acum` = '{}' WHERE (`N` = '{}');'''.format(Name,Val,N)
-        cur.execute(sql)
-        n=cur.rowcount
-        self.cnn.commit()    
-        cur.close()
+        cur.execute("SELECT `VF_Fra` FROM `{}`".format(Name))
+        datos = cur.fetchall()
+        cur.close()    
+        return datos
 
+    def acumulaf(self,Name,N,Val):
         cur = self.cnn.cursor()
         sql='''UPDATE `compradores`.`s_vc` SET `Valor` = '{}' WHERE (`Nombre` = '{}');'''.format(Val,Name)
         cur.execute(sql)
