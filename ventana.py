@@ -374,17 +374,13 @@ class Ventana(Frame):
     def griWinBot(self):
                
         self.Seller.insTab(self.nam,self.griFech.get(),self.griRe.get(),self.griF_E.get(),self.gricant.get(),self.griCL.get(),self.griVr.get(),self.griF_V.get(),self.griVr.get())
-        datos = self.Seller.STab(self.nam)
-        
-        N=str(datos[-1][0])
-        if N != "1" :
-            V=int(self.acumlate(N))
-        else:
-            V=0
+               
         self.clGrip()
-        
         datos = self.Seller.STab(self.nam)
-        self.cretGrip(datos,3)
+        datos_f=self.acumlate(self.nam,datos)
+        
+        self.cretGrip(datos_f,3)
+               
         self.winGrip.destroy()
     def acumlate(self,N,datos):
         data=self.Seller.acumula(N)
@@ -708,8 +704,16 @@ class Ventana(Frame):
             self.grid.place(x=110,y=0,width=1460, height=680)
             for row in dat:
                 self.grid.insert("",END, text= str(row[0]), values=(str(row[1]),str(row[2]),str(row[3]),str(row[4]),str(row[5]),str(row[6]),str(row[7]),str(row[8]),str(row[9]),str(row[10]),str(row[11]),str(row[12]),str(row[13]),str(row[14]),str(row[15])))
+            
             self.resumen=Label(self, text="Acumulado:",bg="#2F3E45",fg="white")   
             self.resumen.place(x=1400,y=685)  
+            resu=0
+            for vas in range(len(dat)):
+                asd=int(dat[vas][-2])+ int(resu)
+                resu=asd
+            self.resumen=Label(self, text=resu,bg="#2F3E45",fg="white")   
+            self.resumen.place(x=1480,y=685)  
+            
            
             
     def create_widgets(self):
